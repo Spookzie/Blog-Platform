@@ -1,4 +1,6 @@
-package com.spookzie.Blog_Platform.domain.entities;
+package com.spookzie.Blog_Platform.domain;
 
-public enum PostStatus {
+public enum PostStatus
+{
+    DRAFT, PUBLISHED
 }
