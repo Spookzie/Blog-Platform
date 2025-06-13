@@ -2,6 +2,7 @@ package com.spookzie.Blog_Platform.mappers;
 
 import com.spookzie.Blog_Platform.domain.PostStatus;
 import com.spookzie.Blog_Platform.domain.dtos.CategoryDto;
+import com.spookzie.Blog_Platform.domain.dtos.CreateCategoryRequest;
 import com.spookzie.Blog_Platform.domain.entities.Category;
 import com.spookzie.Blog_Platform.domain.entities.Post;
 import org.mapstruct.Mapper;
@@ -19,6 +20,11 @@ public interface CategoryMapper
     @Mapping(target = "postCount", source = "posts", qualifiedByName = "calculatePostCount")
     CategoryDto toDto(Category category);
 
+
+    Category toEntity(CreateCategoryRequest create_category_request);
+
+
+    /*  Helper Methods  */
     @Named("calculatePostCount")
     default long calculatePostCount(List<Post> posts)
     {
@@ -30,6 +36,4 @@ public interface CategoryMapper
                         post -> post.getStatus().equals(PostStatus.PUBLISHED)
                 ).count();
     }
-
-    Category fromDto(CategoryDto categoryDto);
 }

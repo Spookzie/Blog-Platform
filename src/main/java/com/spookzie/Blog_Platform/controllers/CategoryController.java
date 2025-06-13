@@ -1,15 +1,14 @@
 package com.spookzie.Blog_Platform.controllers;
 
 import com.spookzie.Blog_Platform.domain.dtos.CategoryDto;
+import com.spookzie.Blog_Platform.domain.dtos.CreateCategoryRequest;
 import com.spookzie.Blog_Platform.mappers.CategoryMapper;
 import com.spookzie.Blog_Platform.services.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,5 +32,19 @@ public class CategoryController
 
 
         return new ResponseEntity<>(categoryDtos, HttpStatus.OK);
+    }
+
+
+    @PostMapping
+    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CreateCategoryRequest create_category_request)
+    {
+        CategoryDto createdCategoryDto = this.categoryMapper.toDto(
+                this.categoryService.createCategory(
+                        this.categoryMapper.toEntity(create_category_request)
+                )
+        );
+
+
+        return new ResponseEntity<>(createdCategoryDto, HttpStatus.CREATED);
     }
 }

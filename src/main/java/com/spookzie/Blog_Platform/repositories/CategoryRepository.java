@@ -15,4 +15,7 @@ public interface CategoryRepository extends JpaRepository<Category, UUID>
     /*  Fetching all the categories and along with them all the posts that are associated with each query   */
     @Query("SELECT c FROM Category c LEFT JOIN FETCH c.posts")
     List<Category> findAllWithPostCount();
+
+
+    boolean existsByNameIgnoreCase(String name);
 }
