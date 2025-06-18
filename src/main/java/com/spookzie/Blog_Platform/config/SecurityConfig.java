@@ -35,12 +35,13 @@ public class SecurityConfig
     {
         BlogUserDetailsService blogUserDetailsService = new BlogUserDetailsService(user_repo);
 
+        /*  Saving a default test user  */
         String email = "user@test.com";
         user_repo.findByEmail(email).orElseGet(() ->{
             User newUser = User.builder()
-                    .name("Test User")
+                    .name("Test User 4")
                     .email(email)
-                    .password(passwordEncoder().encode("password"))
+                    .password(this.passwordEncoder().encode("password"))
                     .build();
 
             return user_repo.save(newUser);
@@ -85,7 +86,7 @@ public class SecurityConfig
     }
 
 
-    /*  Required for custom login/authentication logic  */
+    /*  Retrieving the default AuthenticationManager from Spring's Configuration for custom login/authentication logic  */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception
     {

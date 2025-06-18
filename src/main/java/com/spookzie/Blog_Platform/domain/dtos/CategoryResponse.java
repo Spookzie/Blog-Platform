@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDto
+public class CategoryResponse
 {
     private UUID id;
     private String name;

@@ -66,6 +66,7 @@ public class AuthenticationServiceImpl implements AuthenticationService
         return this.userDetailsService.loadUserByUsername(username);
     }
 
+
     /*  Helper Methods  */
     private Key getSigningKey()
     {

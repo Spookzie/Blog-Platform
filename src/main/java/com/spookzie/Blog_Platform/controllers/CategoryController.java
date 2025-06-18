@@ -1,6 +1,6 @@
 package com.spookzie.Blog_Platform.controllers;
 
-import com.spookzie.Blog_Platform.domain.dtos.CategoryDto;
+import com.spookzie.Blog_Platform.domain.dtos.CategoryResponse;
 import com.spookzie.Blog_Platform.domain.dtos.CreateCategoryRequest;
 import com.spookzie.Blog_Platform.mappers.CategoryMapper;
 import com.spookzie.Blog_Platform.services.CategoryService;
@@ -24,29 +24,29 @@ public class CategoryController
 
 
     @GetMapping
-    public ResponseEntity<List<CategoryDto>> listCategories()
+    public ResponseEntity<List<CategoryResponse>> listCategories()
     {
-        List<CategoryDto> categoryDtos= this.categoryService.listCategories()
+        List<CategoryResponse> categoryResponses = this.categoryService.listCategories()
                 .stream()
-                .map(this.categoryMapper::toDto)
+                .map(this.categoryMapper::toCategoryResponse)
                 .toList();
 
 
-        return new ResponseEntity<>(categoryDtos, HttpStatus.OK);
+        return new ResponseEntity<>(categoryResponses, HttpStatus.OK);
     }
 
 
     @PostMapping
-    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CreateCategoryRequest create_category_request)
+    public ResponseEntity<CategoryResponse> createCategory(@Valid @RequestBody CreateCategoryRequest create_category_request)
     {
-        CategoryDto createdCategoryDto = this.categoryMapper.toDto(
+        CategoryResponse createdCategoryResponse = this.categoryMapper.toCategoryResponse(
                 this.categoryService.createCategory(
                         this.categoryMapper.toEntity(create_category_request)
                 )
         );
 
 
-        return new ResponseEntity<>(createdCategoryDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(createdCategoryResponse, HttpStatus.CREATED);
     }
 
 

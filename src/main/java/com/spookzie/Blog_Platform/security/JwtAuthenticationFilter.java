@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
     {
         try
         {
-            String token = extractToken(request);
+            String token = this.extractToken(request);
             if(token != null)
             {
                 UserDetails userDetails = this.authService.validateToken(token);
@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
                     request.setAttribute("userId", ((BlogUserDetails) userDetails).getId());
             }
         } catch (Exception ex) {
-            // Do not throw exceptions, just don't authenticate the user
+            /* Do not throw exceptions, just don't authenticate the user    */
             log.warn("Received invalid auth token");
         }
 

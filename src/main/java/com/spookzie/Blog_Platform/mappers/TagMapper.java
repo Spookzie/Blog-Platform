@@ -1,32 +1,26 @@
 package com.spookzie.Blog_Platform.mappers;
 
 import com.spookzie.Blog_Platform.domain.PostStatus;
-import com.spookzie.Blog_Platform.domain.dtos.CategoryResponse;
-import com.spookzie.Blog_Platform.domain.dtos.CreateCategoryRequest;
-import com.spookzie.Blog_Platform.domain.entities.Category;
+import com.spookzie.Blog_Platform.domain.dtos.CreateTagsRequest;
+import com.spookzie.Blog_Platform.domain.dtos.TagResponse;
 import com.spookzie.Blog_Platform.domain.entities.Post;
+import com.spookzie.Blog_Platform.domain.entities.Tag;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
-import java.util.List;
+import java.util.Set;
 
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface CategoryMapper
+public interface TagMapper
 {
-    /*  Set the postCount field in the DTO by applying the method calculatePostCount on the posts list of the Category entity   */
     @Mapping(target = "postCount", source = "posts", qualifiedByName = "calculatePostCount")
-    CategoryResponse toCategoryResponse(Category category);
+    TagResponse toTagResponse(Tag tag);
 
-
-    Category toEntity(CreateCategoryRequest create_category_request);
-
-
-    /*  Helper Methods  */
     @Named("calculatePostCount")
-    default long calculatePostCount(List<Post> posts)
+    default long calculatePostCount(Set<Post> posts)
     {
         if(posts == null)
             return 0;
@@ -35,4 +29,7 @@ public interface CategoryMapper
                 .filter(post -> post.getStatus().equals(PostStatus.PUBLISHED))
                 .count();
     }
+
+
+//    Tag toEntity(CreateTagsRequest create_tag_request);
 }

@@ -3,6 +3,7 @@ package com.spookzie.Blog_Platform.security;
 import com.spookzie.Blog_Platform.domain.entities.User;
 import com.spookzie.Blog_Platform.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
