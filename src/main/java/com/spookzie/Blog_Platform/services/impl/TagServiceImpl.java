@@ -3,6 +3,7 @@ package com.spookzie.Blog_Platform.services.impl;
 import com.spookzie.Blog_Platform.domain.entities.Tag;
 import com.spookzie.Blog_Platform.repositories.TagRepository;
 import com.spookzie.Blog_Platform.services.TagService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService
 {
-    private final TagRepository tagRepository;
+    private final TagRepository tagRepo;
 
 
     @Override
     public List<Tag> listTags()
     {
-        return this.tagRepository.findAllWithPostCount();
+        return this.tagRepo.findAllWithPostCount();
     }
 
 
@@ -29,7 +30,7 @@ public class TagServiceImpl implements TagService
     @Override
     public List<Tag> createTags(Set<String> tag_names)
     {
-        List<Tag> existingTags = this.tagRepository.findByNameIn(tag_names);
+        List<Tag> existingTags = this.tagRepo.findByNameIn(tag_names);
         Set<String> existingTagsNames = existingTags.stream()
                 .map(Tag::getName)
                 .collect(Collectors.toSet());
@@ -44,7 +45,7 @@ public class TagServiceImpl implements TagService
 
         List<Tag> savedTags = new ArrayList<>();
         if(!newTags.isEmpty())
-            savedTags = this.tagRepository.saveAll(newTags);
+            savedTags = this.tagRepo.saveAll(newTags);
 
         savedTags.addAll(existingTags);
 
@@ -57,11 +58,19 @@ public class TagServiceImpl implements TagService
     @Override
     public void deleteTag(UUID id)
     {
-        this.tagRepository.findById(id).ifPresent(tag -> {
+        this.tagRepo.findById(id).ifPresent(tag -> {
             if(!tag.getPosts().isEmpty())
                 throw new IllegalStateException("Cannot delete tag with posts");
 
-            this.tagRepository.deleteById(id);
+            this.tagRepo.deleteById(id);
         });
+    }
+
+
+    @Override
+    public Tag getTagById(UUID id)
+    {
+        return this.tagRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Tag not found with id " + id));
     }
 }

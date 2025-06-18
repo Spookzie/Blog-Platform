@@ -1,7 +1,7 @@
 package com.spookzie.Blog_Platform.mappers;
 
 import com.spookzie.Blog_Platform.domain.PostStatus;
-import com.spookzie.Blog_Platform.domain.dtos.CategoryResponse;
+import com.spookzie.Blog_Platform.domain.dtos.CategoryDto;
 import com.spookzie.Blog_Platform.domain.dtos.CreateCategoryRequest;
 import com.spookzie.Blog_Platform.domain.entities.Category;
 import com.spookzie.Blog_Platform.domain.entities.Post;
@@ -18,7 +18,7 @@ public interface CategoryMapper
 {
     /*  Set the postCount field in the DTO by applying the method calculatePostCount on the posts list of the Category entity   */
     @Mapping(target = "postCount", source = "posts", qualifiedByName = "calculatePostCount")
-    CategoryResponse toCategoryResponse(Category category);
+    CategoryDto toDto(Category category);
 
 
     Category toEntity(CreateCategoryRequest create_category_request);

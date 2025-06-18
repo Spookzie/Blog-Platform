@@ -1,7 +1,7 @@
 package com.spookzie.Blog_Platform.controllers;
 
 import com.spookzie.Blog_Platform.domain.dtos.CreateTagsRequest;
-import com.spookzie.Blog_Platform.domain.dtos.TagResponse;
+import com.spookzie.Blog_Platform.domain.dtos.TagDto;
 import com.spookzie.Blog_Platform.mappers.TagMapper;
 import com.spookzie.Blog_Platform.services.TagService;
 import jakarta.validation.Valid;
@@ -24,24 +24,24 @@ public class TagController
 
 
     @GetMapping
-    public ResponseEntity<List<TagResponse>> listTags()
+    public ResponseEntity<List<TagDto>> listTags()
     {
-        List<TagResponse> tagResponses = this.tagService.listTags()
+        List<TagDto> tagDtos = this.tagService.listTags()
                 .stream()
-                .map(this.tagMapper::toTagResponse)
+                .map(this.tagMapper::toDto)
                 .toList();
 
 
-        return new ResponseEntity<>(tagResponses, HttpStatus.OK);
+        return new ResponseEntity<>(tagDtos, HttpStatus.OK);
     }
 
 
     @PostMapping
-    public ResponseEntity<List<TagResponse>> createTags(@Valid @RequestBody CreateTagsRequest create_tags_request)
+    public ResponseEntity<List<TagDto>> createTags(@Valid @RequestBody CreateTagsRequest create_tags_request)
     {
-        List<TagResponse> createdTags = this.tagService.createTags(create_tags_request.getNames())
+        List<TagDto> createdTags = this.tagService.createTags(create_tags_request.getNames())
                 .stream()
-                .map(this.tagMapper::toTagResponse)
+                .map(this.tagMapper::toDto)
                 .toList();
 
 

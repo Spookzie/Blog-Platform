@@ -1,8 +1,7 @@
 package com.spookzie.Blog_Platform.mappers;
 
 import com.spookzie.Blog_Platform.domain.PostStatus;
-import com.spookzie.Blog_Platform.domain.dtos.CreateTagsRequest;
-import com.spookzie.Blog_Platform.domain.dtos.TagResponse;
+import com.spookzie.Blog_Platform.domain.dtos.TagDto;
 import com.spookzie.Blog_Platform.domain.entities.Post;
 import com.spookzie.Blog_Platform.domain.entities.Tag;
 import org.mapstruct.Mapper;
@@ -17,7 +16,7 @@ import java.util.Set;
 public interface TagMapper
 {
     @Mapping(target = "postCount", source = "posts", qualifiedByName = "calculatePostCount")
-    TagResponse toTagResponse(Tag tag);
+    TagDto toDto(Tag tag);
 
     @Named("calculatePostCount")
     default long calculatePostCount(Set<Post> posts)
@@ -29,7 +28,4 @@ public interface TagMapper
                 .filter(post -> post.getStatus().equals(PostStatus.PUBLISHED))
                 .count();
     }
-
-
-//    Tag toEntity(CreateTagsRequest create_tag_request);
 }

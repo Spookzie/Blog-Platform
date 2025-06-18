@@ -3,6 +3,7 @@ package com.spookzie.Blog_Platform.services.impl;
 import com.spookzie.Blog_Platform.domain.entities.Category;
 import com.spookzie.Blog_Platform.repositories.CategoryRepository;
 import com.spookzie.Blog_Platform.services.CategoryService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,5 +52,13 @@ public class CategoryServiceImpl implements CategoryService
 
             this.categoryRepo.deleteById(id);
         }
+    }
+
+
+    @Override
+    public Category getCategoryById(UUID id)
+    {
+        return this.categoryRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with id " + id));
     }
 }

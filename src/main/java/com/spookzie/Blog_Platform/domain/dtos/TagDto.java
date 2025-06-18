@@ -9,10 +9,10 @@ import java.util.UUID;
 
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class CategoryResponse
+@NoArgsConstructor
+@Builder
+public class TagDto
 {
     private UUID id;
     private String name;
