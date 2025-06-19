@@ -2,10 +2,12 @@ package com.spookzie.Blog_Platform.controllers;
 
 import com.spookzie.Blog_Platform.domain.dtos.CreatePostRequestDto;
 import com.spookzie.Blog_Platform.domain.dtos.PostDto;
+import com.spookzie.Blog_Platform.domain.dtos.UpdatePostRequestDto;
 import com.spookzie.Blog_Platform.domain.entities.User;
 import com.spookzie.Blog_Platform.mappers.PostMapper;
 import com.spookzie.Blog_Platform.services.PostService;
 import com.spookzie.Blog_Platform.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +59,7 @@ public class PostController
 
     @PostMapping
     public ResponseEntity<PostDto> createPost(
-            @RequestBody CreatePostRequestDto create_post_request_dto,
+            @Valid @RequestBody CreatePostRequestDto create_post_request_dto,
             @RequestAttribute UUID user_id
     ){
         User loggedInUser = this.userService.getUserById(user_id);
@@ -71,5 +73,43 @@ public class PostController
 
 
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+    }
+
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<PostDto> updatePost(
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdatePostRequestDto update_post_request_dto
+    ){
+        PostDto updatedPost = this.postMapper.toDto(
+                this.postService.updatePost(
+                        id,
+                        this.postMapper.toUpdatePostRequest(update_post_request_dto)
+                )
+        );
+
+
+        return new ResponseEntity<>(updatedPost, HttpStatus.OK);
+    }
+
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<PostDto> getPost(@PathVariable UUID id)
+    {
+        PostDto foundPost = this.postMapper.toDto(
+                this.postService.getPost(id)
+        );
+
+
+        return ResponseEntity.ok(foundPost);
+    }
+
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> deletePost(@PathVariable UUID id)
+    {
+        this.postService.deletePost(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
