@@ -11,7 +11,7 @@ services:
     # The PostgreSQL Docker container uses environment variables to read configuration
     # Setting the password
     environment:
-      POSTGRES_PASSWORD: secrets.DB_PASSWORD
+      POSTGRES_PASSWORD: DB_PASSWORD
 
   # Database management interface
   adminer:

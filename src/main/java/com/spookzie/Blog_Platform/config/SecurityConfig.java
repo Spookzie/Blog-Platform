@@ -35,13 +35,13 @@ public class SecurityConfig
     {
         BlogUserDetailsService blogUserDetailsService = new BlogUserDetailsService(user_repo);
 
-        /*  Saving a default test user  */
-        String email = "user@test.com";
+        /*  Saving a new user   */
+        String email = "user@test.com"; // Enter email here
         user_repo.findByEmail(email).orElseGet(() ->{
             User newUser = User.builder()
                     .name("Test User 4")
                     .email(email)
-                    .password(this.passwordEncoder().encode("password"))
+                    .password(this.passwordEncoder().encode("password"))    // Enter password here (use a better password to prevent browser warning)
                     .build();
 
             return user_repo.save(newUser);
