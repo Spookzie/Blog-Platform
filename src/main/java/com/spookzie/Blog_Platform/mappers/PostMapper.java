@@ -1,5 +1,7 @@
 package com.spookzie.Blog_Platform.mappers;
 
+import com.spookzie.Blog_Platform.domain.CreatePostRequest;
+import com.spookzie.Blog_Platform.domain.dtos.CreatePostRequestDto;
 import com.spookzie.Blog_Platform.domain.dtos.PostDto;
 import com.spookzie.Blog_Platform.domain.entities.Post;
 import org.mapstruct.Mapper;
@@ -14,4 +16,6 @@ public interface PostMapper
     @Mapping(target = "category", source = "category")
     @Mapping(target = "tags", source = "tags")
     PostDto toDto(Post post);
+
+    CreatePostRequest toCreatePostRequest(CreatePostRequestDto create_post_request_dto);
 }

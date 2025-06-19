@@ -1,5 +1,6 @@
 package com.spookzie.Blog_Platform.controllers;
 
+import com.spookzie.Blog_Platform.domain.dtos.CreatePostRequestDto;
 import com.spookzie.Blog_Platform.domain.dtos.PostDto;
 import com.spookzie.Blog_Platform.domain.entities.User;
 import com.spookzie.Blog_Platform.mappers.PostMapper;
@@ -27,8 +28,8 @@ public class PostController
     @GetMapping
     public ResponseEntity<List<PostDto>> listPosts(
             @RequestParam(required = false) UUID category_id,
-            @RequestParam(required = false) UUID tag_id)
-    {
+            @RequestParam(required = false) UUID tag_id
+    ) {
         List<PostDto> postDtos = this.postService.getAllPosts(category_id, tag_id)
                 .stream()
                 .map(this.postMapper::toDto)
@@ -51,5 +52,24 @@ public class PostController
 
 
         return ResponseEntity.ok(draftDtos);
+    }
+
+
+    @PostMapping
+    public ResponseEntity<PostDto> createPost(
+            @RequestBody CreatePostRequestDto create_post_request_dto,
+            @RequestAttribute UUID user_id
+    ){
+        User loggedInUser = this.userService.getUserById(user_id);
+
+        PostDto createdPost = this.postMapper.toDto(
+                this.postService.createPost(
+                        loggedInUser,
+                        this.postMapper.toCreatePostRequest(create_post_request_dto)
+                )
+        );
+
+
+        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 }
