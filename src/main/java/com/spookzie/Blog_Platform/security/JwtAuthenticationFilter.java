@@ -15,6 +15,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 
+/*
+* Custom Spring Security filter that:
+* - Intercepts each HTTP request (OncePerRequestFilter)
+* - Extracts the JWT from the request
+* - Validates the token
+* - If valid, sets the user as authenticated in Spring’s SecurityContext
+* - Then lets the request continue
+**********************************/
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter
@@ -32,14 +40,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
             {
                 UserDetails userDetails = this.authService.validateToken(token);
 
+                // Creating the authentication object manually
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
+                        userDetails,    // Principal - user identity
+                        null,           // Credentials - user password/token
+                        userDetails.getAuthorities()    // Authorities - roles/permissions (in this case only ROLE_USER)
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
+                // Storing the user id into the HTTPServletRequest so controllers/services can access later (eg GET drafts)
                 if(userDetails instanceof BlogUserDetails)
                     request.setAttribute("user_id", ((BlogUserDetails) userDetails).getId());
             }
@@ -51,6 +61,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
         filterChain.doFilter(request, response);
     }
 
+
+    /*
+    * Ensuring that only "Bearer " headers are accepted and the rest are skipped
+    * Bearer tokens are standard in JWT-based stateless authentication
+    ************************/
     private String extractToken(HttpServletRequest request)
     {
         String bearerToken = request.getHeader("Authorization");

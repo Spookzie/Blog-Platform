@@ -61,19 +61,19 @@ public class AuthenticationServiceImpl implements AuthenticationService
     @Override
     public UserDetails validateToken(String token)
     {
-        String username = extractUsername(token);
+        String username = this.extractUsername(token);
 
         return this.userDetailsService.loadUserByUsername(username);
     }
 
 
-    /*  Helper Methods  */
     private Key getSigningKey()
     {
-        byte[] keyBytes = secretKey.getBytes();
-        return Keys.hmacShaKeyFor(keyBytes);
+        byte[] keyBytes = this.secretKey.getBytes();
+        return Keys.hmacShaKeyFor(keyBytes);    // Building a key for HMAC algorithms
     }
 
+    /*  Decoding & validating the JWT and then extracting the username from it  */
     private String extractUsername(String token)
     {
         Claims claims = Jwts.parserBuilder()
